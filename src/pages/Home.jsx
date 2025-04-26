@@ -65,7 +65,20 @@ export const HomePage = () => {
         { headers: { "Content-Type": "application/json" } }
       );
   
-      const botMessage = { sender: "bot", text: apiResponse.data.answer };
+      setResponse((prev) => {
+        const newPrev = [...prev];
+        newPrev[newPrev.length - 1] = {
+          ...newPrev[newPrev.length - 1],
+          prompt_hash: apiResponse.data.monad_prompt_url
+        };
+        return newPrev;
+      });
+
+      const botMessage = { 
+        sender: "bot", 
+        text: apiResponse.data.answer, 
+        answer_hash: apiResponse.data.monad_answer_url
+      };
       setResponse((prev) => [...prev, botMessage]);
     } catch (error) {
       console.error("Error fetching response:", error);
@@ -186,13 +199,29 @@ export const HomePage = () => {
           {response.map((msg, index) => (
             <div
               key={index}
-              className={clsx("message", {
+              className={clsx("message",
+                (msg.answer_hash || msg.prompt_hash) && "got-hash",
+                {
                 "message-user": msg.sender === "user",
                 "message-bot": msg.sender === "bot",
                 "message-error": msg.sender === "error",
               })}
             >
               {renderMessageWithCodeBlocks(msg.text)}
+              {msg.sender === "bot" && msg.answer_hash && (
+                <div className="hash-link">
+                  <a href={msg.answer_hash} target="_blank" rel="noreferrer">
+                    TX Link
+                  </a>
+                </div>
+              )}
+              {msg.sender === "user" && msg.prompt_hash && (
+                <div className="hash-link">
+                  <a href={msg.prompt_hash} target="_blank" rel="noreferrer">
+                    TX Link
+                  </a>
+                </div>
+              )}
             </div>
           ))}
           {isLoading && (

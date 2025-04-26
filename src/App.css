@@ -413,6 +413,34 @@ p {
   word-wrap: break-word;
   margin-bottom: 10px;
 }
+.got-hash {
+  position: relative;
+  padding: 10px 15px 5px 15px
+}
+.hash-link {
+  display: flex;
+  margin-top: 5px;
+  justify-content: flex-end;
+  font-size: 10px;
+  color: #320271;
+}
+.hash-link a {
+  text-decoration: none;
+  opacity: 0.8;
+}
+.hash-link a:hover {
+  text-decoration: underline;
+  opacity: 1;
+}
+.message-user .hash-link {
+  color: #fafafa;
+}
+.message-user {
+  justify-content: flex-start;
+}
+.message-user .hash-link {
+  left: 10px;
+}
 
 .message-user {
   background-color: #836EF9;
